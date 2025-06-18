@@ -1,0 +1,75 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 10px;
+  position: relative;
+  text-align: center; /* 讓 h1 預設置中 */
+  font-size: 30px;
+}
+
+.container {
+  position: relative;
+  padding-top: 120px; /* 避免 h1 被 logo 擋住 */
+}
+
+.logo {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 200px;   /* 放大 logo */
+  height: 100px;
+  z-index: 10;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 50px;
+}
+
+nav {
+  margin-top: 20px;
+}
+
+nav button {
+  margin-right: 10px;
+  padding: 8px 15px;
+}
+
+.page {
+  display: none;
+  margin-top: 30px;
+}
+
+.page.active {
+  display: block;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto; /* 表格置中 */
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+img.preview {
+  max-width: 50px;
+  max-height: 50px;
+  object-fit: cover;
+}
+
+button {
+  padding: 15px 25px;
+  font-size: 20px;
+  border-radius: 8px;
+}
+
+#reader, #outReader {
+  display: block;
+  margin: 10px auto 0 auto;
+  width: 300px;
+}

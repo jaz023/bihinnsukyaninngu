@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>物料管理系統デモ</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+  <div class="container">
+    <img src="images/sumitomo.png" class="logo" alt="Logo" />
+    <h1>物料管理システムデモ</h1>
+
+    <nav>
+      <button onclick="showPage('home')">ホーム</button>
+      <button onclick="showPage('stock-in')">入庫スキャン</button>
+      <button onclick="showPage('stock-out')">出庫スキャン</button>
+    </nav>
+
+    <!-- ホーム -->
+    <div id="home" class="page active">
+      <h2>ホーム</h2>
+      <p>備品種類數: <span id="itemCount">0</span></p>
+      <p>總在庫數量: <span id="totalStockCount">0</span></p>
+    </div>
+
+    <!-- 入庫スキャン -->
+    <div id="stock-in" class="page">
+      <h2>入庫スキャン</h2>
+      <button onclick="startCamera()" id="startScanBtn">📷 入庫用相機啟動</button>
+      <div id="reader" style="width: 300px; margin-top: 10px;"></div>
+      <p>スキャン結果: <span id="scanResult">なし</span></p>
+
+      <div id="itemInfo" style="display:none;">
+        <p>備品名: <span id="itemName"></span></p>
+        <p>分類: <input type="text" id="editCategoryIn" placeholder="例: 螺絲" /></p>
+        <p>目前在庫數: <span id="itemStock"></span></p>
+        <p>修改在庫數: <input type="number" id="editStockIn" min="0" /></p>
+        <p id="itemImageWrapper" style="display:none;">
+        <img id="itemImage" src="" alt="備品画像" style="max-width:100px;" /></p>
+        <label>入庫數: <input type="number" id="stockInQty" value="1" min="1" /></label><br />
+        <label>備註: <input type="text" id="stockInNote" placeholder="例: 定期補貨" /></label><br />
+        <button onclick="addStock()">入庫確定</button>
+      </div>
+      <div id="noteLog" style="margin-top: 10px;"></div>
+    </div>
+
+    <!-- 出庫スキャン -->
+    <div id="stock-out" class="page">
+      <h2>出庫スキャン</h2>
+      <button onclick="startOutCamera()">📷 出庫用相機啟動</button>
+      <div id="outReader" style="width: 300px; margin-top: 10px;"></div>
+      <p>スキャン結果: <span id="scanOutResult">なし</span></p>
+
+      <div id="outItemInfo" style="display:none;">
+        <p>備品名: <span id="outItemName"></span></p>
+        <p>分類: <input type="text" id="editCategoryOut" placeholder="例: 螺絲" /></p>
+        <p>目前在庫數: <span id="outItemStock"></span></p>
+        <p>修改在庫數: <input type="number" id="editStockOut" min="0" /></p>
+        <label>出庫數: <input type="number" id="stockOutQty" value="1" min="1" /></label><br />
+        <label>使用理由: <input type="text" id="stockOutReason" placeholder="例: 螺絲崩牙" /></label><br />
+        <button onclick="submitStockOut()">出庫確定</button>
+      </div>
+      <div id="outNoteLog" style="margin-top: 10px;"></div>
+    </div>
+
+    <h3 style="margin-top: 30px;">📄 本日出入庫紀錄</h3>
+    <table border="1" id="logTable" style="width: 100%; text-align: left;">
+      <thead>
+        <tr>
+          <th>時間</th>
+          <th>備品名稱</th>
+          <th>數量</th>
+          <th>備註</th>
+        </tr>
+      </thead>
+      <tbody id="logTableBody"></tbody>
+    </table>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
