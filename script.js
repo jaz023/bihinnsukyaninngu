@@ -41,28 +41,41 @@ function showMessage(message, success = true) {
   noteLog.innerHTML = `<p style="color: ${success ? 'green' : 'red'};">${message}</p>`;
 }
 
-// 入庫掃描成功
+// 掃描成功後執行
 function onScanInSuccess(decodedText) {
   const item = findItemByCode(decodedText);
   document.getElementById("scanResult").textContent = decodedText;
 
   if (item) {
+    // 若已存在備品
     document.getElementById("itemName").textContent = item.name;
     document.getElementById("itemStock").textContent = item.stock;
+    document.getElementById("editCategoryIn").value = item.category || "";
+    document.getElementById("editStockIn").value = item.stock;
     document.getElementById("itemImage").src = item.image || "";
     document.getElementById("itemImageWrapper").style.display = item.image ? "block" : "none";
+
     document.getElementById("itemInfo").style.display = "block";
     document.getElementById("newItemForm").style.display = "none";
+
     showMessage("✅ 入庫掃描成功", true);
   } else {
+    // 若為新備品
     document.getElementById("itemInfo").style.display = "none";
     document.getElementById("newItemCode").value = decodedText;
     document.getElementById("newItemName").value = "";
     document.getElementById("newItemCategory").value = "";
     document.getElementById("newItemQty").value = 1;
     document.getElementById("newItemForm").style.display = "block";
+
     showMessage("❌ 找不到該備品編號，請新增備品", false);
   }
+}
+
+// 取消新增備品
+function cancelNewItem() {
+  document.getElementById("newItemForm").style.display = "none";
+  document.getElementById("scanResult").textContent = "なし";
 }
 
 // 出庫掃描成功
@@ -89,6 +102,7 @@ function addNewItem() {
   const name = document.getElementById("newItemName").value.trim();
   const category = document.getElementById("newItemCategory").value.trim();
   const qty = parseInt(document.getElementById("newItemQty").value, 10);
+  const note = document.getElementById("newItemNote").value.trim();
 
   if (!code || !name || !category || isNaN(qty) || qty <= 0) {
     alert("請填寫完整且正確的資料");
@@ -104,8 +118,6 @@ function addNewItem() {
   renderItemList();
 
   document.getElementById("newItemForm").style.display = "none";
-
-  // 顯示剛新增的品項入庫資訊
   document.getElementById("itemName").textContent = name;
   document.getElementById("itemStock").textContent = qty;
   document.getElementById("itemImageWrapper").style.display = "none";
@@ -113,6 +125,18 @@ function addNewItem() {
   document.getElementById("scanResult").textContent = code;
 
   showMessage("✅ 新備品新增成功並入庫", true);
+
+  const record = {
+    date: new Date().toLocaleDateString(),
+    type: "入庫",
+    category,
+    code,
+    name,
+    qty,
+    reason: note
+  };
+  sendToGoogleSheet(record);
+  logAction("入庫", name, qty, note); // ✅ 寫入畫面下方表格
 }
 
 // 入庫數量更新
@@ -128,6 +152,7 @@ function addStock() {
   }
 
   item.stock += qty;
+  item.category = document.getElementById("editCategoryIn").value.trim(); // 若有調整分類
   document.getElementById("itemStock").textContent = item.stock;
   renderItemList();
   showMessage(`✅ 入庫成功，數量：${qty}，備註：${note || "無"}`);
@@ -142,7 +167,9 @@ function addStock() {
     reason: note
   };
   sendToGoogleSheet(record);
+  logAction("入庫", item.name, qty, note); // ✅ 寫入畫面下方表格
 }
+
 
 // 出庫送出
 function submitStockOut() {
@@ -193,7 +220,15 @@ function showOutMessage(msg, success = true) {
 
 // 簡單紀錄動作（可改為寫日誌）
 function logAction(type, name, qty, reason) {
-  console.log(`[${type}] 品項: ${name}, 數量: ${qty}, 理由: ${reason}`);
+  const tbody = document.getElementById("logTableBody");
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${new Date().toLocaleTimeString()}</td>
+    <td>${name}</td>
+    <td>${type === "入庫" ? "+" : "-"}${qty}</td>
+    <td>${reason || "無"}</td>
+  `;
+  tbody.prepend(tr); // 新紀錄放最上面
 }
 
 // 編輯功能
