@@ -26,36 +26,40 @@
     </div>
 
     <!-- 入庫スキャン -->
-    <div id="stock-in" class="page">
-      <h2>入庫スキャン</h2>
-      <button onclick="startCamera()" id="startScanBtn">📷 入庫用相機啟動</button>
-      <div id="reader" style="width: 300px; margin-top: 10px;"></div>
-      <p>スキャン結果: <span id="scanResult">なし</span></p>
-      <!-- 新增新備品區塊，初始隱藏 -->
-    <div id="newItemForm" style="display:none; border: 1px solid #ccc; padding: 10px; margin-top: 10px;">
-      <h3>新增新備品</h3>
-      <label>編號 (Code): <input type="text" id="newItemCode" readonly /></label><br />
-      <label>名稱 (Name): <input type="text" id="newItemName" placeholder="請輸入備品名稱" /></label><br />
-      <label>分類 (Category): <input type="text" id="newItemCategory" placeholder="請輸入分類" /></label><br />
-      <label>數量 (Qty): <input type="number" id="newItemQty" value="1" min="1" /></label><br />
-      <label>備註 (Note): <input type="text" id="newItemNote" placeholder="備註" /></label><br />
-      <button onclick="addNewItem()">新增備品並入庫</button>
-      <button onclick="cancelNewItem()">取消</button>
-    </div>
+<div id="stock-in" class="page">
+  <h2>入庫スキャン</h2>
+  <button onclick="startInCamera()" id="startScanBtn">📷 入庫用相機啟動</button>
+  <div id="reader" style="width: 300px; margin-top: 10px;"></div>
+  <p>スキャン結果: <span id="scanResult">なし</span></p>
 
-      <div id="itemInfo" style="display:none;">
-        <p>備品名: <span id="itemName"></span></p>
-        <p>分類: <input type="text" id="editCategoryIn" placeholder="例: 螺絲" /></p>
-        <p>目前在庫數: <span id="itemStock"></span></p>
-        <p>修改在庫數: <input type="number" id="editStockIn" min="0" /></p>
-        <p id="itemImageWrapper" style="display:none;">
-        <img id="itemImage" src="" alt="備品画像" style="max-width:100px;" /></p>
-        <label>入庫數: <input type="number" id="stockInQty" value="1" min="1" /></label><br />
-        <label>備註: <input type="text" id="stockInNote" placeholder="例: 定期補貨" /></label><br />
-        <button onclick="addStock()">入庫確定</button>
-      </div>
-      <div id="noteLog" style="margin-top: 10px;"></div>
-    </div>
+  <!-- 若掃到新備品 -->
+  <div id="newItemForm" style="display:none; border: 1px solid #ccc; padding: 10px; margin-top: 10px;">
+    <h3>新增新備品</h3>
+    <label>編號 (Code): <input type="text" id="newItemCode" readonly /></label><br />
+    <label>名稱 (Name): <input type="text" id="newItemName" placeholder="請輸入備品名稱" /></label><br />
+    <label>分類 (Category): <input type="text" id="newItemCategory" placeholder="請輸入分類" /></label><br />
+    <label>數量 (Qty): <input type="number" id="newItemQty" value="1" min="1" /></label><br />
+    <label>備註 (Note): <input type="text" id="newItemNote" placeholder="備註" /></label><br />
+    <button onclick="addNewItem()">新增備品並入庫</button>
+    <button onclick="cancelNewItem()">取消</button>
+  </div>
+
+  <!-- 若掃到既有備品 -->
+  <div id="itemInfo" style="display:none;">
+    <p>備品名: <span id="itemName"></span></p>
+    <p>分類: <input type="text" id="editCategoryIn" placeholder="例: 螺絲" /></p>
+    <p>目前在庫數: <span id="itemStock"></span></p>
+    <p>修改在庫數: <input type="number" id="editStockIn" min="0" /></p>
+    <p id="itemImageWrapper" style="display:none;">
+      <img id="itemImage" src="" alt="備品画像" style="max-width:100px;" />
+    </p>
+    <label>入庫數: <input type="number" id="stockInQty" value="1" min="1" /></label><br />
+    <label>備註: <input type="text" id="stockInNote" placeholder="例: 定期補貨" /></label><br />
+    <button onclick="addStock()">入庫確定</button>
+  </div>
+
+  <div id="noteLog" style="margin-top: 10px;"></div>
+</div>
 
     <!-- 出庫スキャン -->
     <div id="stock-out" class="page">
